@@ -1,0 +1,55 @@
+{% extends 'layout/layout.html.twig' %} 
+{% block content %}
+<script src="js/index.js"></script>
+<div class="container-fluid">
+  <div class="row block align-center">
+    <div class="col-xs-12">
+      <span id="clearance-good" class="label label-success label-clearance hidden"></span>
+      <span id="clearance-bad" class="label label-danger label-clearance hidden"></span>
+      <span id="clearance-error" class="label label-default label-clearance hidden"></span>
+    </div>
+  </div>
+  <div class="row block">
+    <div class="col-xs-12">
+      <table id="payments-table" class="table table-striped table-hover table-condensed hidden">
+        <thead>
+          <tr>
+            <th>DATE</th>
+            <th class="table-motive">MOTIF</th>
+            <th class="hidden-xs">MOYEN</th>
+            <th>MONTANT</th>
+          </tr>
+        </thead>
+        <tbody id="payments-body"></tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="hidden-xs"></td>
+            <td id="payments-total" class="align-center weight-bolder"></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div id="div-no-payments" class="alert alert-warning hidden" role="alert"></div>
+      <div id="div-no-file" class="alert alert-warning hidden" role="alert">
+        <div id="div-no-file-text"></div>
+        <div id="div-no-file-button" class="align-center">
+          <button class="btn btn-default" onclick="launchSearchOld(1)">Trouver des données</button>
+          <br />
+          <br />
+          <button class="btn btn-default" onclick="createFile(1)">Créer un fichier</button>
+        </div>
+      </div>
+      <div id="div-zero-file" class="alert alert-warning hidden" role="alert">
+        Il n'existe pas de fichier inférieur à 6 mois.
+        <div class="align-center">
+          <button class="btn btn-default" onclick="createFile(1)">Créer un fichier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row block align-center">
+    {% include 'index/add_payment.html.twig' with {'date': date} %}
+  </div>
+</div>
+{% endblock %}

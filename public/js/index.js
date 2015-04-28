@@ -18,7 +18,7 @@ function initIndex() {
 function getMonthData(_id, _callback) {
     var today = new Date();
     var month = today.getMonth() + 1;
-    var year = today.getFullYear() - 1;
+    var year = today.getFullYear();
 
     if (month < 10) {
         month = "0" + month;
@@ -31,15 +31,22 @@ function getMonthData(_id, _callback) {
 
 function initIHM() {
     $("#div-no-file").addClass("hidden");
-    
-    if (m_found == true) {
-        initClearance();
+    $("#div-zero-file").addClass("hidden");
 
+    if (m_found == true) {
+        $("#btn-add-payment").removeClass("hidden");
+        initClearance();
+    } else {
+        $("#btn-add-payment").addClass("hidden");
     }
     initTable();
 }
 
 function initClearance() {
+    $("#clearance-good").addClass('hidden');
+    $("#clearance-error").addClass('hidden');
+    $("#clearance-bad").addClass('hidden');
+
     if (m_clearance === null) {
         $("#clearance-error").html('ERREUR');
         $("#clearance-error").removeClass('hidden');
@@ -63,6 +70,8 @@ function initTable() {
         }
         else {
             buildPaymentsTable();
+            $("#div-no-file").addClass("hidden");
+            $("#div-no-payments").addClass("hidden");
         }
     }
     else {
@@ -79,7 +88,7 @@ function buildPaymentsTable() {
     for (var i in m_payments) {
         var p = m_payments[i];
 
-        total += p.price;
+        total += parseFloat(p.price);
 
         html += "<tr>";
         html += "<td class='align-center'>" + p.date + "</td>";
@@ -100,7 +109,7 @@ function buildPaymentsTable() {
 
 function launchSearchOld(_id) {
     $("#div-no-file").addClass("hidden");
-    
+
     var today = new Date();
     var month = parseInt(m_month);
     var year = parseInt(m_year);
@@ -114,33 +123,29 @@ function launchSearchOld(_id) {
     m_cpt_search = 1;
 
     getData(_id, year, month, initIHM, searchOlder);
-    
+
 }
 
-function searchOlder()
-{
+function searchOlder() {
     var month = parseInt(m_month) - 1;
     var year = m_year;
-    
-    if(month == 0)
-    {
+
+    if (month == 0) {
         month = 12;
-        year = parseInt(year)-1;
+        year = parseInt(year) - 1;
     }
     else if (month < 10) {
         month = "0" + month;
     }
 
     m_date = month + "-" + year;
-    
+
     m_cpt_search++;
-    
-    if(m_cpt_search < 6)
-    {
+
+    if (m_cpt_search < 6) {
         getData(m_id, year, month, initIHM, searchOlder);
     }
-    else
-    {
+    else {
         $("#div-zero-file").removeClass('hidden');
     }
 }
@@ -149,7 +154,7 @@ function getData(_id, _year, _month, _success_cbk, _fail_cbk) {
     m_id = _id;
     m_month = _month;
     m_year = _year;
-    
+
     var url = "files/" + _id + "/" + _year + "-" + _month + ".json";
     $.getJSON(url, function(data) {
             m_found = true;
@@ -167,4 +172,100 @@ function getData(_id, _year, _month, _success_cbk, _fail_cbk) {
         .fail(function() {
             _fail_cbk();
         });
+}
+
+function createFile(_id) {
+    $.ajax({
+        type: "GET",
+        dataType: 'json',
+        async: false,
+        url: 'create_file',
+        data: {
+            id: _id
+        },
+        success: function() {
+            initIndex();
+        },
+        failure: function() {
+            alert("Une erreur est survenue...");
+        }
+    });
+}
+
+function submitAddForm(_id) {
+    var date = $("#add-date").val();
+    var motive = $("#add-motive").val();
+    var media = $("#add-media").val();
+    var amount = $("#add-amount").val();
+
+    var error = false;
+    var err_message = "Merci de renseigner correctement les champs suivants : <br /><ul>";
+
+    if (date == "" || date == null || date == undefined) {
+        error = true;
+        err_message += "<li>date</li>";
+    }
+
+    if (motive == "" || motive == null || motive == undefined) {
+        error = true;
+        err_message += "<li>motif</li>";
+    }
+
+    if (media == "" || media == null || media == undefined || media == "none") {
+        error = true;
+        err_message += "<li>moyen de paiement</li>";
+    }
+
+    if (amount == "" || amount == null || amount == undefined || isNaN(parseFloat(amount))) {
+        error = true;
+        err_message += "<li>montant</li>";
+    }
+    else {
+        amount = amount.replace(',', '.');
+    }
+
+    err_message += "</ul>";
+
+    if (error == true) {
+        $("#div-error").html(err_message);
+        $("#div-error").removeClass('hidden');
+        return;
+    }
+
+    $("#div-error").html("");
+    $("#div-error").addClass('hidden');
+
+    $.ajax({
+        type: "GET",
+        dataType: 'json',
+        async: false,
+        url: 'add_payment',
+        data: {
+            date: date,
+            motive: motive,
+            media: media,
+            amount: parseFloat(amount),
+            id: _id
+        },
+        success: function() {
+            var date = new Date();
+            var day = date.getDate();
+            var month = parseInt(date.getMonth()) + 1;
+            var year = date.getFullYear();
+
+            if (month < 10) month = "0" + month;
+
+            var str_date = day + "-" + month + "-" + year;
+
+            $('#paymentModal').modal('toggle');
+            $("#add-date").val('');
+            $("#add-motive").val('');
+            $("#add-media").val('none');
+            $("#add-amount").val(str_date);
+            initIndex();
+        },
+        failure: function() {
+            alert("Une erreur est survenue...");
+        }
+    });
 }
