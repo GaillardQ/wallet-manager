@@ -53,7 +53,7 @@ router.get('/create_file', function(req, res, next) {
     content.payments = [];
 
     var fs = require('fs');
-    fs.writeFile("../public/files/" + id + "/" + file, JSON.stringify(content), function(err) {
+    fs.writeFile("public/files/" + id + "/" + file, JSON.stringify(content), function(err) {
         if (err) {
             res.status(500).json(err);
             return;
