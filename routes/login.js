@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var md5 = require('MD5');
 var salt = "Vousreprendrezbienunpeudemaméchanceté,elleestgratuite";
-var l = "Alison.Quentin.2011";
+var l = "Wallet.Quentin";
 var sess;
 
 /* GET login page. */
