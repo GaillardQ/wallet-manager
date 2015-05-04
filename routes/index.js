@@ -53,7 +53,7 @@ router.get('/create_file', function(req, res, next) {
     content.payments = [];
 
     var fs = require('fs');
-    fs.writeFile("../public/files/" + id + "/" + file, JSON.stringify(content), function(err) {
+    fs.writeFile("public/files/" + id + "/" + file, JSON.stringify(content), function(err) {
         if (err) {
             res.status(500).json(err);
             return;
@@ -86,7 +86,7 @@ router.get('/add_payment', function(req, res, next) {
     var file = year + "-" + month + ".json";
 
     var fs = require('fs');
-    fs.readFile("../public/files/" + id + "/" + file, {
+    fs.readFile("public/files/" + id + "/" + file, {
         encoding: 'utf-8'
     }, function(err, data) {
         if (err) {
@@ -106,7 +106,7 @@ router.get('/add_payment', function(req, res, next) {
         var clearance = parseFloat(json.clearance) - parseFloat(amount);
         json.clearance = clearance;
 
-        fs.writeFile("../public/files/" + id + "/" + file, JSON.stringify(json), function(err2) {
+        fs.writeFile("public/files/" + id + "/" + file, JSON.stringify(json), function(err2) {
             if (err2) {
                 res.status(500).json(err2);
                 return;
