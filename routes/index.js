@@ -1,9 +1,26 @@
 var express = require('express');
 var router = express.Router();
 var sess;
+var path = null;
+
+function initPath(_host)
+{
+    if(_host === "wallet-manager-quenting.c9.io")
+    {
+        path = "../public/files";
+    }
+    else if( _host == "wallet-mgr.quentin.gaillard.fr" )
+    {
+        path = "public/files";
+    }
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    if(path == null)
+    {
+        initPath(req.headers.host);
+    }
     sess = req.session;
 
     var is_logged = sess.is_logged || false;
@@ -20,7 +37,8 @@ router.get('/', function(req, res, next) {
         var month = parseInt(date.getMonth()) + 1;
         var year = date.getFullYear();
     
-        if (month < 10) month = "0" + month;
+        if (day < 10)   day     = "0" + day;
+        if (month < 10) month   = "0" + month;
     
         var str_date = day + "-" + month + "-" + year;
     
@@ -32,6 +50,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/create_file', function(req, res, next) {
+    if(path == null)
+    {
+        initPath(req.headers.host);
+    }
     var id = req.query.id;
     if (id == "" || id == undefined || id == null) {
         res.status(404).json({
@@ -53,7 +75,7 @@ router.get('/create_file', function(req, res, next) {
     content.payments = [];
 
     var fs = require('fs');
-    fs.writeFile("public/files/" + id + "/" + file, JSON.stringify(content), function(err) {
+    fs.writeFile(path + "/" + id + "/" + file, JSON.stringify(content), function(err) {
         if (err) {
             res.status(500).json(err);
             return;
@@ -63,6 +85,11 @@ router.get('/create_file', function(req, res, next) {
 });
 
 router.get('/add_payment', function(req, res, next) {
+    if(path == null)
+    {
+        initPath(req.headers.host);
+    }
+    
     var id = req.query.id;
 
     var date = req.query.date;
@@ -86,7 +113,7 @@ router.get('/add_payment', function(req, res, next) {
     var file = year + "-" + month + ".json";
 
     var fs = require('fs');
-    fs.readFile("public/files/" + id + "/" + file, {
+    fs.readFile(path + "/" + id + "/" + file, {
         encoding: 'utf-8'
     }, function(err, data) {
         if (err) {
@@ -106,7 +133,7 @@ router.get('/add_payment', function(req, res, next) {
         var clearance = parseFloat(json.clearance) - parseFloat(amount);
         json.clearance = clearance;
 
-        fs.writeFile("public/files/" + id + "/" + file, JSON.stringify(json), function(err2) {
+        fs.writeFile(path + "/" + id + "/" + file, JSON.stringify(json), function(err2) {
             if (err2) {
                 res.status(500).json(err2);
                 return;
