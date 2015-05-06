@@ -12,10 +12,8 @@
     HTML ELTS
  ********/
 
-table {
-    th {
-        text-align: center;
-    }
+table th {
+    text-align: center;
 }
 
 /********************************************************/
@@ -27,9 +25,10 @@ table {
     padding: 20px;
     border-radius: 15px;
     background-color: #ff9800;
-    input {
-        color: white !important;
-    }
+}
+
+.login-block input {
+    color: white !important;
 }
 
 .block {

@@ -1,6 +1,6 @@
-/** PADDING **/
-.padding-20 {
-    padding: 20px;
+/** BACKGROUND **/
+.bgd-white {
+    background-color: white;    
 }
 
 /** MARGIN **/
@@ -11,15 +11,20 @@
     margin-right: 5px;
 }
 
+/** PADDING **/
+.padding-20 {
+    padding: 20px;
+}
+
+/** TEXT **/
+.weight-bolder {
+    font-weight: bolder;
+}
+
 /** TEXT ALIGN **/
 .align-center {
     text-align: center;
 }
 .align-left {
     text-align: left;
-}
-
-/** TEXT **/
-.weight-bolder {
-    font-weight: bolder;
 }

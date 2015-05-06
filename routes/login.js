@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var md5 = require('MD5');
-var salt = "Vousreprendrezbienunpeudemaméchanceté,elleestgratuite";
-var l = "Wallet.Quentin";
+var salt = "";
+var l = "";
 var sess;
 
 /* GET login page. */
