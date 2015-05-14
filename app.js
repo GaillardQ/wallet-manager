@@ -1,3 +1,5 @@
+ENV = 'DEV'; //PROD
+
 var express = require('express');
 var session = require('express-session');
 var path = require('path');
@@ -6,9 +8,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var Twig = require("twig");
+DB_MGR = require('db-mgr');
 
 var index = require('./routes/index');
 var login = require('./routes/login');
+var manager = require('./routes/manager');
 
 var app = express();
 
@@ -31,11 +35,14 @@ app.use(session({secret: 'ItIsAsEcReTkEy'}));
 
 app.use('/', index);
 app.use('/login', login);
+app.use('/manager', manager);
 
 app.get('/robots.txt', function (req, res) {
     res.type('text/plain');
     res.send("User-agent: *\nDisallow: /");
 });
+
+DB_MGR.connect(ENV);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

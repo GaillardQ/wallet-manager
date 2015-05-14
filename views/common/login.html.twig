@@ -29,9 +29,13 @@
         <div class="container-fluid margin-top-50">
             <div class="row block align-center">
                 <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
-                    {% if error is defined %}
+                    {% if error is defined and error == 'login' %}
                         <div class="alert alert-danger" role="alert">
                             Ton <b>login</b> n'est pas bon...
+                        </div>
+                    {% elseif error is defined and error == 'error' %}
+                        <div class="alert alert-danger" role="alert">
+                            Une erreur est survenue...
                         </div>
                     {% endif %}
                 </div>

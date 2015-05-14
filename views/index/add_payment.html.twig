@@ -14,7 +14,7 @@
                 <form id="add-form">
                     <div class="form-group">
                         <label for="add-date">Date</label>
-                        <input type="date" class="form-control" id="add-date" value="{{ date }}" palceholder="Entrer la date">
+                        <input type="date" class="form-control" id="add-date" value="{{ date|date("d-m-Y") }}" palceholder="Entrer la date">
                     </div>
                     <div class="form-group">
                         <label for="add-motive">Motif</label>

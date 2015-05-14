@@ -4,14 +4,24 @@
 <div class="container-fluid" id="index-content">
   <div class="row block align-center">
     <div class="col-xs-12">
-      <span id="clearance-good" class="label label-success label-clearance hidden"></span>
-      <span id="clearance-bad" class="label label-danger label-clearance hidden"></span>
-      <span id="clearance-error" class="label label-default label-clearance hidden"></span>
+      {% if clearance is not null %}
+        {% if clearance > 0 %}
+          <span id="clearance-good" class="label label-success label-clearance">{{ clearance }} €</span>
+        {% elseif clearance < 0 %}
+          <span id="clearance-bad" class="label label-danger label-clearance">{{ clearance }} €</span>
+        {% endif %}
+      {% else %}
+          <span id="clearance-error" class="label label-default label-clearance">ERREUR</span>
+      {% endif %}
     </div>
   </div>
   <div class="row block">
     <div class="col-xs-12">
-      <table id="payments-table" class="table table-striped table-hover table-condensed hidden">
+      {% if payments is not null and payments|length != 0 %}
+        <table id="payments-table" class="table table-striped table-hover table-condensed">
+      {% else %}
+        <table id="payments-table" class="table table-striped table-hover table-condensed hidden">
+      {% endif %}
         <thead>
           <tr>
             <th>DATE</th>
@@ -20,7 +30,18 @@
             <th>MONTANT</th>
           </tr>
         </thead>
-        <tbody id="payments-body"></tbody>
+        <tbody id="payments-body">
+          {% if payments is not null %}
+            {% for p in payments %}
+              <tr>
+                <td class='align-center'>{{ p.date|date("d-m-Y") }}</td>
+                <td class='table-motive'>{{ p.motive }}</td>
+                <td class='hidden-xs align-center'>{{ p.media }}</td>
+                <td class='align-center'>{{ p.price }} €</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        </tbody>
         <tfoot>
           <tr>
             <td></td>
@@ -30,22 +51,11 @@
           </tr>
         </tfoot>
       </table>
-      <div id="div-no-payments" class="alert alert-warning align-center hidden" role="alert"></div>
-      <div id="div-no-file" class="alert alert-warning align-center hidden" role="alert">
-        <div id="div-no-file-text" class="align-center"></div>
-        <div id="div-no-file-button" class="align-center">
-          <button class="btn btn-default" onclick="launchSearchOld(1)">Trouver des données</button>
-          <br />
-          <br />
-          <button class="btn btn-default" onclick="createFile(1)">Créer un fichier</button>
+      {% if payments is not defined and payments|length == 0 %}
+        <div id="div-no-payments" class="alert alert-warning align-center" role="alert">
+          Aucune transaction trouvée pour le mois de <b>{{ month }}</b>.
         </div>
-      </div>
-      <div id="div-zero-file" class="alert alert-warning align-center hidden" role="alert">
-        Il n'existe pas de fichier inférieur à 6 mois.
-        <div class="align-center">
-          <button class="btn btn-default" onclick="createFile(1)">Créer un fichier</button>
-        </div>
-      </div>
+      {% endif %}
     </div>
   </div>
   <div class="row block align-center">
