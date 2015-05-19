@@ -68,7 +68,6 @@ function submitAddForm(_id) {
             $("#add-motive").val('');
             $("#add-media").val('none');
             $("#add-amount").val(str_date);
-            initIndex();
         },
         failure: function() {
             alert("Une erreur est survenue...");

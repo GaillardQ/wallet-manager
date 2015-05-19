@@ -28,12 +28,19 @@ router.get('/', function(req, res, next) {
     if (day < 10) day = "0" + day;
     if (month < 10) month = "0" + month;
 
-    var str_date = day + "-" + month + "-" + year;
-    var str_month = month + "-" + year;
+    var str_date = year + "-" + month + "-" + day;
+    var str_month = year + "-" + month;
     
     var str_end = year+"-"+month+"-"+day;
-    var d_start = date.setDate(1);
-    var str_start = date.getFullYear()+"-"+parseInt(parseInt(date.getMonth())+1)+"-"+date.getDate();
+    date.setDate(1);
+    
+    var start_month = parseInt(parseInt(date.getMonth())+1);
+    if(start_month < 10) start_month = "0"+start_month;
+    var start_day = date.getDate();
+    if(start_day < 10) start_day = "0"+start_day;
+    var str_start = date.getFullYear()+"-"+start_month+"-"+start_day;
+    
+    var payments_total = 0;
     
     var clbk = function(err, payments)
     {
@@ -45,6 +52,18 @@ router.get('/', function(req, res, next) {
         if(payments == undefined)
         {
             payments = null;
+        }
+        
+        if(payments.length > 0)
+        {
+            for(var p in payments)
+            {
+                var price = payments[p].price;
+                if(price)
+                {
+                    payments_total += price;
+                }
+            }
         }
         
         var clbk2 = function(err2, clearance)
@@ -60,28 +79,35 @@ router.get('/', function(req, res, next) {
             }
             
             var total = null;
+            
             if(clearance != null && clearance.length > 0)
             {
                 var o_clearance = clearance[0];
-                if(o_clearance.hasOwnProperty('value') && o_clearance.hasOwnProperty('total'))
+                if(o_clearance.hasOwnProperty('value'))
                 {
-                    console.log("Budget : "+parseFloat(o_clearance.value));
-                    console.log("Dépenses : "+parseFloat(o_clearance.total));
-                    total = parseFloat(o_clearance.value) - parseFloat(o_clearance.total);
+                    total = parseFloat(o_clearance.value) - payments_total;
                     total = Math.round(total*100) / 100;
-                    console.log("Total : "+total);
                 }
             }
             
-            res.render('index/index.html.twig', {
-                title: 'Wallet manager',
-                date: str_date,
-                month: str_month,
-                payments: payments,
-                clearance: total
-            });
+            var clbk3 = function(err, medias)
+            {
+                if(err)
+                {
+                    console.log(err);
+                }
+                res.render('index/index.html.twig', {
+                    title: 'Wallet manager',
+                    date: str_date,
+                    month: str_month,
+                    payments: payments,
+                    clearance: total,
+                    total: payments_total,
+                    medias: medias
+                });   
+            }
+            DB_MGR.getPaymentMedias(clbk3);
         }
-        
         DB_MGR.getMonthClearance(user.id, str_start, str_end, clbk2);
     }
     DB_MGR.getMonthPayments(user.id, str_start, str_end, clbk);
@@ -107,8 +133,23 @@ router.get('/add_payment', function(req, res, next) {
         return;
     }
     
-
-    var date = new Date();
+    var clbk = function(err)
+    {
+        if(err)
+        {
+            console.log(err);
+            res.status(500).json({
+                message: 'Une erreur est survenue'
+            });
+            return;
+        }
+        
+        res.status(200).json({});
+        return;
+        
+    }
+    DB_MGR.savePayment(user.id, date, motive, media, amount, clbk);
+    /*var date = new Date();
     var month = parseInt(date.getMonth()) + 1;
     var year = date.getFullYear();
 
@@ -144,7 +185,7 @@ router.get('/add_payment', function(req, res, next) {
             }
             res.end(JSON.stringify(json));
         });
-    });
+    });*/
 });
 
 module.exports = router;

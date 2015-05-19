@@ -18,9 +18,13 @@ CREATE TABLE IF NOT EXISTS `param`
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`p` varchar(45) NOT NULL,
 	`value` varchar(45) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	KEY `fk_param_user_idx` (`user_id`)
 )
 ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `param`
+ADD CONSTRAINT `fk_param_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 CREATE TABLE IF NOT EXISTS `clearance` 
 (

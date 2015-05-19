@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var md5 = require('MD5');
-var salt = "";
+var salt = "Cestlacleservantaulogindesutilisateurs";
 var sess;
 
 /* GET login page. */
@@ -11,6 +11,7 @@ router.get('/', function(req, res, next) {
     res.render('common/login.html.twig', {error: error});
 });
 
+/* GET check login. */
 router.post('/check', function(req, res, next) {
     var login = req.body.login;
     var hashed_login = md5(md5(login) + md5(salt));
@@ -47,7 +48,6 @@ router.post('/check', function(req, res, next) {
             }
         }
     }
-    
     DB_MGR.checkLogin(hashed_login, clbk);
 });
 

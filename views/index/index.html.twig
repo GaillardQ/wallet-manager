@@ -47,7 +47,7 @@
             <td></td>
             <td></td>
             <td class="hidden-xs"></td>
-            <td id="payments-total" class="align-center weight-bolder"></td>
+            <td id="payments-total" class="align-center weight-bolder">{{ total }} €</td>
           </tr>
         </tfoot>
       </table>
@@ -59,7 +59,7 @@
     </div>
   </div>
   <div class="row block align-center">
-    {% include 'index/add_payment.html.twig' with {'date': date} %}
+    {% include 'index/add_payment.html.twig' with {'date': date, 'medias': medias} %}
   </div>
 </div>
 {% endblock %}
