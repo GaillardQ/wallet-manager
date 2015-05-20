@@ -1,4 +1,4 @@
-<button type="button" id="btn-add-payment" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#paymentModal">
+<button type="button" id="btn-add-payment" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#paymentModal">
     Ajouter un paiement
 </button>
 <div class="modal fade align-left" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -14,7 +14,7 @@
                 <form id="add-form">
                     <div class="form-group">
                         <label for="add-date">Date</label>
-                        <input type="date" class="form-control" id="add-date" value="{{ date }}" palceholder="Entrer la date">
+                        <input type="date" class="form-control" id="add-date" value="{{ date|date("Y-m-d") }}" palceholder="Entrer la date">
                     </div>
                     <div class="form-group">
                         <label for="add-motive">Motif</label>
@@ -24,9 +24,9 @@
                         <label for="add-media">Moyen de paiement</label>
                         <select id="add-media" class="form-control">
                             <option value="none">Choisir...</option>
-                            <option value="CB">CB</option>
-                            <option value="Chèque">Chèque</option>
-                            <option value="Virement">Virement</option>
+                            {% for m in medias %}
+                                <option value="{{ m.id }}">{{ m.value }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
