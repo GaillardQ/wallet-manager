@@ -54,7 +54,6 @@ function submitAddForm(_id) {
         }
     })
     .done(function(res) {
-        alert('OK');
         var date = new Date();
         var day = date.getDate();
         var month = parseInt(date.getMonth()) + 1;
