@@ -40,8 +40,29 @@ router.get('/', function(req, res, next) {
     if(start_day < 10) start_day = "0"+start_day;
     var str_start = date.getFullYear()+"-"+start_month+"-"+start_day;
     
+    var clbk = function(_err, _payments, _total, _payments_total, _medias)
+    {
+        if(_err)
+        {
+            console.log(_err);
+        }
+        res.render('index/index.html.twig', {
+                    title: 'Wallet manager',
+                    date: str_date,
+                    month: str_month,
+                    payments: _payments,
+                    clearance: _total,
+                    total: _payments_total,
+                    medias: _medias
+        }); 
+    }
+    getMonthPayment(user.id, str_start, str_end, clbk);
+
+});
+
+function getMonthPayment(user_id, str_start, str_end, _clbk)
+{
     var payments_total = 0;
-    
     var clbk = function(err, payments)
     {
         if(err)
@@ -92,27 +113,14 @@ router.get('/', function(req, res, next) {
             
             var clbk3 = function(err, medias)
             {
-                if(err)
-                {
-                    console.log(err);
-                }
-                res.render('index/index.html.twig', {
-                    title: 'Wallet manager',
-                    date: str_date,
-                    month: str_month,
-                    payments: payments,
-                    clearance: total,
-                    total: payments_total,
-                    medias: medias
-                });   
+                _clbk(err, payments, total, payments_total, medias);
             }
             DB_MGR.getPaymentMedias(clbk3);
         }
-        DB_MGR.getMonthClearance(user.id, str_start, str_end, clbk2);
+        DB_MGR.getMonthClearance(user_id, str_start, str_end, clbk2);
     }
-    DB_MGR.getMonthPayments(user.id, str_start, str_end, clbk);
-
-});
+    DB_MGR.getMonthPayments(user_id, str_start, str_end, clbk);
+}
 
 router.get('/add_payment', function(req, res, next) {
     var id = req.query.id;
@@ -144,48 +152,51 @@ router.get('/add_payment', function(req, res, next) {
             return;
         }
         
-        res.status(200).json({});
-        return;
+        var date = new Date();
+        var day = date.getDate();
+        var month = parseInt(date.getMonth()) + 1;
+        var year = date.getFullYear();
+    
+        if (day < 10) day = "0" + day;
+        if (month < 10) month = "0" + month;
+    
+        var str_date = year + "-" + month + "-" + day;
+        var str_month = year + "-" + month;
+        
+        var str_end = year+"-"+month+"-"+day;
+        date.setDate(1);
+        
+        var start_month = parseInt(parseInt(date.getMonth())+1);
+        if(start_month < 10) start_month = "0"+start_month;
+        var start_day = date.getDate();
+        if(start_day < 10) start_day = "0"+start_day;
+        var str_start = date.getFullYear()+"-"+start_month+"-"+start_day;
+    
+        var clbk = function(_err, _payments, _total, _payments_total, _medias)
+        {
+            if(_err)
+            {
+                console.log(_err);
+                res.status(500).json({
+                    message: 'Une erreur est survenue'
+                });
+                return;
+            }
+            
+            res.render('index/payments.html.twig', {
+                        month: str_month,
+                        payments: _payments,
+                        clearance: _total,
+                        total: _payments_total
+            }); 
+            
+        }
+        getMonthPayment(user.id, str_start, str_end, clbk);
+        
+       
         
     }
     DB_MGR.savePayment(user.id, date, motive, media, amount, clbk);
-    /*var date = new Date();
-    var month = parseInt(date.getMonth()) + 1;
-    var year = date.getFullYear();
-
-    if (month < 10) month = "0" + month;
-
-    var file = year + "-" + month + ".json";
-
-    var fs = require('fs');
-    fs.readFile(path + "/" + id + "/" + file, {
-        encoding: 'utf-8'
-    }, function(err, data) {
-        if (err) {
-            res.status(500).json(err);
-            return;
-        }
-
-        var json = JSON.parse(data);
-        if (json.payments == null || json.payments == undefined) {
-            res.status(500).json({
-                message: 'Une erreur est survenue'
-            });
-            return;
-        }
-
-        json.payments.push(object);
-        var clearance = parseFloat(json.clearance) - parseFloat(amount);
-        json.clearance = clearance;
-
-        fs.writeFile(path + "/" + id + "/" + file, JSON.stringify(json), function(err2) {
-            if (err2) {
-                res.status(500).json(err2);
-                return;
-            }
-            res.end(JSON.stringify(json));
-        });
-    });*/
 });
 
 module.exports = router;

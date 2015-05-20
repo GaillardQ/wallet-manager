@@ -43,7 +43,6 @@ function submitAddForm(_id) {
 
     $.ajax({
         type: "GET",
-        dataType: 'json',
         async: false,
         url: 'add_payment',
         data: {
@@ -52,25 +51,28 @@ function submitAddForm(_id) {
             media: media,
             amount: parseFloat(amount),
             id: _id
-        },
-        success: function() {
-            var date = new Date();
-            var day = date.getDate();
-            var month = parseInt(date.getMonth()) + 1;
-            var year = date.getFullYear();
-
-            if (month < 10) month = "0" + month;
-
-            var str_date = day + "-" + month + "-" + year;
-
-            $('#paymentModal').modal('toggle');
-            $("#add-date").val('');
-            $("#add-motive").val('');
-            $("#add-media").val('none');
-            $("#add-amount").val(str_date);
-        },
-        failure: function() {
-            alert("Une erreur est survenue...");
         }
+    })
+    .done(function(res) {
+        alert('OK');
+        var date = new Date();
+        var day = date.getDate();
+        var month = parseInt(date.getMonth()) + 1;
+        var year = date.getFullYear();
+
+        if (month < 10) month = "0" + month;
+
+        var str_date = day + "-" + month + "-" + year;
+
+        $('#paymentModal').modal('toggle');
+        $("#add-date").val('');
+        $("#add-motive").val('');
+        $("#add-media").val('none');
+        $("#add-amount").val(str_date);
+        
+        $("#payments-div").html(res);
+    })
+    .fail(function() {
+        alert("Une erreur est survenue...");
     });
 }
