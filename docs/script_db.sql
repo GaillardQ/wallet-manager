@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `param`
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`p` varchar(45) NOT NULL,
 	`value` varchar(45) NOT NULL,
+	`user_id` int(11) NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `fk_param_user_idx` (`user_id`)
 )
