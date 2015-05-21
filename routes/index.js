@@ -4,7 +4,6 @@ var utils = require('utils');
 var router = express.Router();
 
 var sess;
-var path = null;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

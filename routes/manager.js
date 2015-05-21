@@ -1,26 +1,16 @@
 var express = require('express');
+require('../models/manager.js')
 var router = express.Router();
 
 var sess = null;
-var path = null;
 
-function initPath(_host)
-{
-    if( _host === "wallet-manager-quenting.c9.io:80" )
-    {
-        path = "../public/files";
-    }
-    else if( _host == "wallet-mgr.quentin.gaillard.fr" )
-    {
-        path = "public/files";
-    }
-}
-
+/********************************************
+ * Home : [/]                               *
+ ********************************************/
 router.get('/', function(req, res, next) {
-    sess = req.session;
-
-    var is_logged = sess.is_logged || false;
-    if (!is_logged) {
+    var l = is_logged(req);
+    if(l == false)
+    {
         res.writeHead(302, {
             'Location': '/login'
         });
@@ -28,59 +18,79 @@ router.get('/', function(req, res, next) {
         return;
     }
     
-    if(path == null)
-    {
-        initPath(req.headers.host);
-    }
     
-    var id = 1;
     
-    var date = new Date();
-    var month = parseInt(date.getMonth()) + 1;
-    var year = date.getFullYear();
+    res.render('manager/index.html.twig', {}); 
+});
 
-    if (month < 10) month = "0" + month;
 
-    var file = year + "-" + month + ".json";
 
-    var clbk_ok = function(_data)
+/********************************************
+ * Months list : [/files]                   *
+ ********************************************/
+router.get('/files', function(req, res, next) {
+    var l = is_logged(req);
+    if(l == false)
     {
-        res.render('manager/index.html.twig', {
-            data: _data
+        res.writeHead(302, {
+            'Location': '/login'
         });
+        res.end();
+        return;
     }
     
-    var clbk_err = function(_err)
+    res.render('manager/files-index.html.twig', {}); 
+});
+
+
+
+/********************************************
+ * List of payments : [/file?month=]        *
+ ********************************************/
+router.get('/file', function(req, res, next) {
+    var l = is_logged(req);
+    if(l == false)
     {
-        res.render('manager/index.html.twig', {
-            error: _err
+        res.writeHead(302, {
+            'Location': '/login'
         });
+        res.end();
+        return;
     }
     
-    readFile(path + "/" + id + "/" + file, clbk_ok, clbk_err);
+    var s = req.query.month;
+    var re = new RegExp("^([0-9]{2,4}[-][0-9]{2,4})$");
+    if(re.test(s))
+    {
+        res.render('manager/files-month-content.html.twig', {}); 
+        return;
+    }
+    else if(s == "all")
+    {
+        res.render('manager/files-all-content.html.twig', {}); 
+        return;
+    }
+    else
+    {
+        res.writeHead(302, {
+            'Location': '/manager'
+        });
+        res.end();
+        return;
+    }
+    
     
 });
 
-function readFile(_name, _callback_ok, _callback_err)
-{
-    
-    var fs = require('fs');
-    fs.readFile(_name, function(err, data) {
-        if (err) {
-            _callback_err(err);
-        }
-        else
-        {
-            _callback_ok(data);
-        }
-    });
-}
 
-router.get('/file', function(req, res, next) {
-    sess = req.session;
 
-    var is_logged = sess.is_logged || false;
-    if (!is_logged) {
+/********************************************
+ * Params : [/params]                       *
+ ********************************************/
+router.get('/params', function(req, res, next) {
+    var l = is_logged(req);
+    if(l == false)
+    {
         res.writeHead(302, {
             'Location': '/login'
         });
@@ -88,34 +98,25 @@ router.get('/file', function(req, res, next) {
         return;
     }
     
-    if(path == null)
-    {
-        initPath(ENV);
-    }
-    
-    var id = 1;
-    
-    var date = new Date();
-    var month = parseInt(date.getMonth()) + 1;
-    var year = date.getFullYear();
-
-    if (month < 10) month = "0" + month;
-
-    var file = year + "-" + month + ".json";
-
-    var fs = require('fs');
-    fs.readFile(path + "/" + id + "/" + file, function(err, data) {
-        var error = "";
-        if (err) {
-            error = "Aucun fichier n'est disponible pour <b>"+month+"-"+year+"</b>.";
-        }
-        
-        res.render('manager/file_content.html.twig', {
-            error: error,
-            data: data
-        });
-    });
-    
+    res.render('manager/params.html.twig', {}); 
 });
 
 module.exports = router;
+
+
+
+
+
+function is_logged(req)
+{
+    var sess = req.session;
+    var is_logged = sess.is_logged || false;
+    var user = sess.user;
+    if (!is_logged || user == null || user == undefined || user.id == null) {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}

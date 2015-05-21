@@ -13,6 +13,7 @@ DB_MGR = require('db-mgr');
 var index = require('./routes/index');
 var login = require('./routes/login');
 var manager = require('./routes/manager');
+var graph = require('./routes/graphs');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use(session({secret: 'ItIsAsEcReTkEy'}));
 app.use('/', index);
 app.use('/login', login);
 app.use('/manager', manager);
+app.use('/manager/graph', graph);
 
 app.get('/robots.txt', function (req, res) {
     res.type('text/plain');
