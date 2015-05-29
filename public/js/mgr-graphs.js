@@ -35,19 +35,31 @@ function createMonthClearanceGraph()
                 clearance = 0;
             }
             
+            var colors, data;
+            
+            var solde = clearance - payments;
+            if(solde < 0)
+            {
+                colors = ['#e51c23'];
+                data = [{ label: "Dépenses", value: payments }];
+            }
+            else
+            {
+                colors = ['#ff9800', '#4caf50']
+                data = [
+                    { label: "Dépenses",value: payments }, 
+                    { label: "Solde", value: solde }
+                ];
+            }
+            
+            console.log(data);
+            
             Morris.Donut({
                 element: 'graph-month-clearance',
-                data: [{
-                    label: "Dépenses",
-                    value: payments
-                }, {
-                    label: "Solde",
-                    value: clearance
-                }],
-                colors:['#ff9800', '#4caf50'],
+                data: data,
+                colors:colors,
                 resize: true
             });
-            
         }
     })
     .fail(function() {
