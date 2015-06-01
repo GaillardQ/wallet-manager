@@ -30,6 +30,33 @@
                         </div>
                     </div>
                 </div> 
+                <div class="col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Nombre d'achats par jours</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="graph-payments-number" class="mgr-graph"></div>
+                            <div id="error-payments-number" class="alert alert-danger hidden"></div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Autres stats</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="graph-payments-others" class="mgr-graph">
+                                <p>
+                                    Nombre d'achats total: <span id="nb_payments" class="label label-default"></span><br />
+                                    Montant moyen d'un achat : <span id="avg_payments" class="label label-default"></span>
+                                </p>
+                            </div>
+                            <div id="error-payments-others" class="alert alert-danger hidden"></div>
+                        </div>
+                    </div>
+                </div> 
             </div>
             <!--
                     a. donut : dépense (%) /Reste(% => 100-%depense)

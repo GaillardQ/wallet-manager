@@ -93,19 +93,32 @@ function createMonthPaymentAmountGraph(res)
     {
         $("#error-payments-amount").removeClass("hidden");
         $("#error-payments-amount").html("Une erreur est survenue.");
+        
+        $("#error-payments-number").removeClass("hidden");
+        $("#error-payments-number").html("Une erreur est survenue.");
+        
+        $("#error-payments-others").removeClass("hidden");
+        $("#error-payments-others").html("Une erreur est survenue.");
     }
     else
     {
         var data = new Array();
         
+        var avg_total = 0;
+        var nb_total = 0;
+        var sum_total = 0;
         for(var i in res.data)
         {
             var d = res.data[i];
-            console.log(d);
+            
             var date = d.date;
             var sum = d.sum;
             var nb = d.nb;
             var avg = 0;
+            
+            nb_total += nb;
+            sum_total += sum;
+            
             if(nb != 0)
             {
                 avg = Math.round(sum/nb*100)/100;
@@ -113,9 +126,15 @@ function createMonthPaymentAmountGraph(res)
             var o = {
                 date: date,
                 sum: sum,
-                avg: avg
+                avg: avg,
+                nb: nb
             };
             data.push(o);
+        }
+        
+        if(nb_total != 0)
+        {
+            avg_total = Math.round(sum_total/nb_total*100)/100;
         }
         
         Morris.Line({
@@ -135,5 +154,27 @@ function createMonthPaymentAmountGraph(res)
             smooth: false,
             resize: true
         });
+        
+        Morris.Bar({
+            // ID of the element in which to draw the chart.
+            element: 'graph-payments-number',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: data,
+            // The name of the data record attribute that contains x-visitss.
+            xkey: 'date',
+            // A list of names of data record attributes that contain y-visitss.
+            ykeys: ['nb'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['Nombre d\'achats'],
+            barRatio: 0.4,
+            xLabelAngle: 35,
+            hideHover: 'auto',
+            resize: true
+        });
+        
+        $("#avg_payments").html(avg_total+" €");
+        $("#nb_payments").html(nb_total+" €");
     }
 }

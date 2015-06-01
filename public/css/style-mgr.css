@@ -24,7 +24,11 @@ body {
     CLASS
  ********/
 .mgr-graph {
-    max-height: 200px;
+    height: 200px;
+}
+
+.mgr-graph p {
+    font-size: 25px;
 }
 
 /********************************************************/
