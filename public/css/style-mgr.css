@@ -38,4 +38,10 @@ body {
     padding-top: 25px;
 }
 
+@media (max-width: 768px)
+{
+    #page-wrapper {
+        padding-top: 70px;    
+    }
+}
 /********************************************************/

@@ -22,20 +22,23 @@
                 <div class="col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">TEST</h3>
+                            <h3 class="panel-title">Moyenne des dépenses par jours</h3>
                         </div>
                         <div class="panel-body">
-                            <div id="graph-test" style="max-height: 200px"></div>
-                            <div id="error-test" class="alert alert-danger hidden"></div>
+                            <div id="graph-payments-amount" class="mgr-graph"></div>
+                            <div id="error-payments-amount" class="alert alert-danger hidden"></div>
                         </div>
                     </div>
                 </div> 
             </div>
             <!--
                     a. donut : dépense (%) /Reste(% => 100-%depense)
-                    b. donut : dépense par moyen de paiement
-                    c. courbe (nombre achats par jours) + histo (montant par jours)
-                    d. courbe (nombre achats par mois) + histo (montant par mois)
+                    b. courbe : somme + moyenne du montant des achats par jours (SUM(p.value) as somme, COUNT(p.id) as nb GROUP BY day)
+                    c. histogramme : nombre d'achat par jours durant le mois (voir précédent)
+                    d. chiffres :
+                          i. nombre d'achat durant le mois (+moyenne par jours) (voir précédent)
+                         ii. montant moyen par achat (voir précédent)
+                        iii. 
             -->
         </div>
     </div>
