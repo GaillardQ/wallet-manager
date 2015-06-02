@@ -2,11 +2,29 @@
 {% block content %}
     <div id="page-wrapper">
         <div class="container-fluid">
-            <h1>Files index</h1>
-            <ul>
-                <li>Display of the month list with data in db</li>
-                <li>Select one month or all month</li>
-            </ul>
+            <script src="/js/mgr-files.js"></script>  
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    {% if error is defined %}
+                        <div id="error-month" class="alert alert-danger">Une erreur est survenue lors de la récupération des mois.</div>
+                    {% endif %}
+                    <div class="form-group align-center">
+                        <select class="form-control align-center" id="month-select" onchange="getPaymentsMonth();">
+                            <option value="none">Sélectionner un mois...</option>
+                            <option value="all">Tous</option>
+                            {% for d in data %}
+                                <option value="{{ d.month }}">{{ d.month }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div id="error-payments" class="alert alert-danger hidden">Une erreur est survenue lors de la récupération des paiements.</div>
+                </div>
+            </div>
+            <div id="payments-list" class="align-center"></div>
         </div>
     </div>
 {% endblock %}

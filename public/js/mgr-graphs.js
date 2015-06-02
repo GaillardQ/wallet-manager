@@ -195,6 +195,6 @@ function createMonthPaymentAmountGraph(res)
         });
         
         $("#avg_payments").html(avg_total+" €");
-        $("#nb_payments").html(nb_total+" €");
+        $("#nb_payments").html(nb_total);
     }
 }

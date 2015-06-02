@@ -39,7 +39,22 @@ router.get('/files', function(req, res, next) {
         return;
     }
     
-    res.render('manager/files-index.html.twig', {}); 
+    var clbk = function(err, rows)
+    {
+        var data = {};
+        if(err)
+        {
+            data.error = true;
+        }
+        else
+        {
+            data.data = rows;
+        }
+        res.render('manager/files-index.html.twig', data); 
+    }
+    DB_MGR.getMonthList(req.session.user.id, clbk);
+    
+    
 });
 
 
@@ -62,24 +77,42 @@ router.get('/file', function(req, res, next) {
     var re = new RegExp("^([0-9]{2,4}[-][0-9]{2,4})$");
     if(re.test(s))
     {
-        res.render('manager/files-month-content.html.twig', {}); 
-        return;
+        var start = s + "-01";
+        var end = s + "-31";
+        
+        var clbk = function(err, payments)
+        {
+            if(err) { res.status(500).json(); return; }
+            var clbk2 = function(err, clearance)
+            {
+                if(err) { res.status(500).json(); return; }
+                res.render('manager/files-month-content.html.twig', {month:s, payments:payments, clearance:clearance}); 
+                return;    
+            }
+            DB_MGR.getMonthClearance(req.session.user.id, start, end, clbk2);
+        }
+        DB_MGR.getMonthPayments(req.session.user.id, start, end, clbk);
     }
     else if(s == "all")
     {
-        res.render('manager/files-all-content.html.twig', {}); 
-        return;
+        var clbk = function(err, payments)
+        {
+            if(err) { res.status(500).json(); return; }
+            var clbk2 = function(err, clearances)
+            {
+                if(err) { res.status(500).json(); return; }
+                res.render('manager/files-all-content.html.twig', {payments:payments, clearances:clearances}); 
+                return;
+            }
+            DB_MGR.getAllMonthsClearance(req.session.user.id, clbk2);
+        }
+        DB_MGR.getAllMonthPayments(req.session.user.id, clbk);
     }
     else
     {
-        res.writeHead(302, {
-            'Location': '/manager'
-        });
-        res.end();
+        res.status(500).json({error: "BAD_PARAMETER"});
         return;
     }
-    
-    
 });
 
 

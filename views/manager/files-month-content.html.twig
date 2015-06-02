@@ -1,16 +1,21 @@
-{% extends 'layout/layout-manager.html.twig' %} 
-{% block content %}
-    <div id="page-wrapper">
-        <div class="container-fluid">
-            <h1>Month content</h1>
-            <p>Manage your month payments:</p>
-            <ul>
-                <li>Add</li>
-                <li>Update</li>
-                <li>Delete</li>
-                <li>Change budget</li>
-            </ul>
-            
+<h4><span class="label label-primary">{{ month }}</span></h4>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3 form-inline">
+        <div class="form-group align-center">
+            <label for="month-payment">Budget : </label>
+            <div class="input-group">
+                <input type="text" class="form-control align-right" id="month-budget" placeholder="Budget..." value="{{ clearance[0].value }}"><br />
+                <span class="input-group-addon">€</span>
+            </div>
+            &nbsp&nbsp
+            <button class="btn btn-default" onclick="saveBudget('{{month}}');"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
         </div>
     </div>
-{% endblock %}
+</div>
+<div class="row">
+    <div>
+        {% for p in payments %}
+            {{ p.paid_at }} ; {{ p.price }} ; {{ p.motive }} ; {{ p.media }} <br />
+        {% endfor %}
+    </div>
+</div>
