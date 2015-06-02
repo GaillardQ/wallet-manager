@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var md5 = require('MD5');
-var salt = "Cestlacleservantaulogindesutilisateurs";
+salt = "Cestlacleservantaulogindesutilisateurs";
 var sess;
 
 /* GET login page. */

@@ -107,6 +107,25 @@ function createMonthPaymentAmountGraph(res)
         var avg_total = 0;
         var nb_total = 0;
         var sum_total = 0;
+        
+        if(res.data != null && res.data.length == 0)
+        {
+            var date = new Date();
+            var month = parseInt(date.getMonth()) + 1;
+            var year = date.getFullYear();
+        
+            if (month < 10) month = "0" + month;
+        
+            var date = year + "-" + month + "-01";
+            var o = {
+                date: date,
+                sum: 0,
+                avg: 0,
+                nb: 0
+            };
+            data.push(o);
+        }
+        
         for(var i in res.data)
         {
             var d = res.data[i];
@@ -150,6 +169,7 @@ function createMonthPaymentAmountGraph(res)
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
             labels: ['Somme (€)', 'Moyenne (€)'],
+            xLabelAngle: 35,
             // Disables line smoothing
             smooth: false,
             resize: true

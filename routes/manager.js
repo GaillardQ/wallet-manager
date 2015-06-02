@@ -98,7 +98,23 @@ router.get('/params', function(req, res, next) {
         return;
     }
     
-    res.render('manager/params.html.twig', {}); 
+    var clbk = function (err, rows)
+    {
+        var error = null;
+        if(err != null)
+        {
+            console.log(err);
+            error = true;
+        }
+        
+        var value = null;
+        if(rows.length > 0)
+        {
+            value = rows[0].value;
+        }
+        res.render('manager/params.html.twig', {error: error, value:value, user:req.session.user.id});    
+    }
+    DB_MGR.getUserBudget(req.session.user.id, clbk);
 });
 
 module.exports = router;

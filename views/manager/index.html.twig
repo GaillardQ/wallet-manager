@@ -2,10 +2,6 @@
 {% block content %}
     <div id="page-wrapper">
         <div class="container-fluid">
-            {% if error is defined %}
-                <div class="alert alert-danger" role="alert"> {{ error }} </div>
-            {% endif %}
-            
             <script src="/js/mgr-graphs.js"></script>  
             <div class="row">
                 <div class="col-md-6">
@@ -58,15 +54,6 @@
                     </div>
                 </div> 
             </div>
-            <!--
-                    a. donut : dépense (%) /Reste(% => 100-%depense)
-                    b. courbe : somme + moyenne du montant des achats par jours (SUM(p.value) as somme, COUNT(p.id) as nb GROUP BY day)
-                    c. histogramme : nombre d'achat par jours durant le mois (voir précédent)
-                    d. chiffres :
-                          i. nombre d'achat durant le mois (+moyenne par jours) (voir précédent)
-                         ii. montant moyen par achat (voir précédent)
-                        iii. 
-            -->
         </div>
     </div>
 {% endblock %}

@@ -14,6 +14,7 @@ var index = require('./routes/index');
 var login = require('./routes/login');
 var manager = require('./routes/manager');
 var graph = require('./routes/graphs');
+var params = require('./routes/params');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use('/', index);
 app.use('/login', login);
 app.use('/manager', manager);
 app.use('/manager/graph', graph);
+app.use('/manager/params', params);
 
 app.get('/robots.txt', function (req, res) {
     res.type('text/plain');
