@@ -62,8 +62,9 @@ function createMonthClearanceGraph(res)
         }
         
         var colors, data;
-        
+        payments = Math.round(payments*100) / 100;
         var solde = clearance - payments;
+        solde = Math.round(solde*100) / 100;
         if(solde < 0)
         {
             colors = ['#e51c23'];
