@@ -1,8 +1,8 @@
-DROP IF EXISTS param;
-DROP IF EXISTS clearance;
-DROP IF EXISTS payment;
-DROP IF EXISTS user;
-DROP IF EXISTS media;
+DROP TABLE IF EXISTS param;
+DROP TABLE IF EXISTS clearance;
+DROP TABLE IF EXISTS payment;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS media;
 
 CREATE TABLE IF NOT EXISTS `user` 
 (
@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `param`
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`p` varchar(45) NOT NULL,
 	`value` varchar(45) NOT NULL,
+	`user_id` int(11) NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `fk_param_user_idx` (`user_id`)
 )

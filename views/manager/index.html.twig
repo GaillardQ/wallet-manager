@@ -2,18 +2,58 @@
 {% block content %}
     <div id="page-wrapper">
         <div class="container-fluid">
-            {% if error is defined %}
-                <div class="alert alert-danger" role="alert"> {{ error }} </div>
-            {% endif %}
-            
-            {% if data is defined %}
-                <!--
-                        a. donut : dépense (%) /Reste(% => 100-%depense)
-                        b. donut : dépense par moyen de paiement
-                        c. courbe (nombre achats par jours) + histo (montant par jours)
-                        d. courbe (nombre achats par mois) + histo (montant par mois)
-                -->
-            {% endif %}
+            <script src="/js/mgr-graphs.js"></script>  
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Dépenses / Solde</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="graph-month-clearance" class="mgr-graph"></div>
+                            <div id="error-month-clearance" class="alert alert-danger hidden"></div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Moyenne des dépenses par jours</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="graph-payments-amount" class="mgr-graph"></div>
+                            <div id="error-payments-amount" class="alert alert-danger hidden"></div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Nombre d'achats par jours</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="graph-payments-number" class="mgr-graph"></div>
+                            <div id="error-payments-number" class="alert alert-danger hidden"></div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Autres stats</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="graph-payments-others" class="mgr-graph">
+                                <p>
+                                    Nombre d'achats total: <span id="nb_payments" class="label label-default"></span><br />
+                                    Montant moyen d'un achat : <span id="avg_payments" class="label label-default"></span>
+                                </p>
+                            </div>
+                            <div id="error-payments-others" class="alert alert-danger hidden"></div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
         </div>
     </div>
 {% endblock %}

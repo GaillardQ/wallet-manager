@@ -3,6 +3,8 @@
       {% if clearance is not null %}
         {% if clearance > 0 %}
           <span id="clearance-good" class="label label-success label-clearance">{{ clearance }} €</span>
+        {% elseif clearance == 0 %}
+          <span id="clearance-warn" class="label label-warning label-clearance">{{ clearance }} €</span>
         {% elseif clearance < 0 %}
           <span id="clearance-bad" class="label label-danger label-clearance">{{ clearance }} €</span>
         {% endif %}

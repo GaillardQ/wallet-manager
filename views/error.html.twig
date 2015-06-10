@@ -18,7 +18,9 @@
     <h2>{{ message }}</h2>
     <p>{{ error.status }}</p>
     <br />
-    <p>{{ error.stack }}</p>
+    {% if error.status != 404 %}
+      <p>{{ error.stack }}</p>
+    {% endif %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- <script src="bootstrap/js/bootstrap.min.js"></script> -->
   </body>

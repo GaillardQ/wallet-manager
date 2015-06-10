@@ -1,0 +1,45 @@
+{% extends 'layout/layout-manager.html.twig' %} 
+{% block content %}
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <script src="/js/mgr-params.js"></script> 
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Budget mensuel</h3></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="error-budget" class="alert alert-danger hidden"></div>
+                            <div id="success-budget" class="alert alert-success hidden"></div>
+                            <div class="form-group align-center">
+                                {% if value is not null %}
+                                    <input type="text" class="form-control align-center" id="month-budget" placeholder="Budget..." value="{{ value }}"><br />
+                                {% else %}
+                                    <input type="text" class="form-control align-center" id="month-budget" placeholder="Budget..."><br />
+                                {% endif %}
+                                <button type="submit" class="btn btn-default" onclick="addOrUpdateUserBudget();">Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Mot de passe</h3></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="error-pwd" class="alert alert-danger hidden"></div>
+                            <div id="success-pwd" class="alert alert-success hidden"></div>
+                            <div class="form-group align-center">
+                                <input type="password" class="form-control" id="old-password" placeholder="Ancien mot de passe..."><br />
+                                <input type="password" class="form-control" id="new-password" placeholder="Nouveau mot de passe..."><br />
+                                <button type="submit" class="btn btn-default" onclick="updatePwd();">Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+{% endblock %}
