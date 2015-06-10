@@ -60,14 +60,15 @@ function submitAddForm(_id) {
         var year = date.getFullYear();
 
         if (month < 10) month = "0" + month;
+        if (day < 10)   day = "0" + day;
 
-        var str_date = day + "-" + month + "-" + year;
+        var str_date = year + "-" + month + "-" + day;
 
         $('#paymentModal').modal('toggle');
-        $("#add-date").val('');
+        $("#add-date").val(str_date);
         $("#add-motive").val('');
         $("#add-media").val('none');
-        $("#add-amount").val(str_date);
+        $("#add-amount").val('');
         
         $("#payments-div").html(res);
     })

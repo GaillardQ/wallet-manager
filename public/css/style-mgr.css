@@ -1,21 +1,38 @@
 /********
     INHERIT
  ********/
-
+.alert-danger {
+    background-color: #e51c23;
+}
+.alert-success {
+    background-color: #4caf50;
+}
+.alert {
+    border: medium none;
+    color: #fff;
+}
 
 /********************************************************/
 
 /********
     HTML ELTS
  ********/
-
+body {
+    margin-top: 51px !important;
+}
 
 /********************************************************/
 
 /********
     CLASS
  ********/
+.mgr-graph {
+    height: 200px;
+}
 
+.mgr-graph p {
+    font-size: 25px;
+}
 
 /********************************************************/
 
@@ -25,6 +42,13 @@
 #page-wrapper {
     margin-bottom: 50px;
     min-height: 86vh;
+    padding-top: 25px;
 }
 
+@media (max-width: 768px)
+{
+    #page-wrapper {
+        padding-top: 70px;    
+    }
+}
 /********************************************************/

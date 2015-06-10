@@ -4,7 +4,6 @@ var utils = require('utils');
 var router = express.Router();
 
 var sess;
-var path = null;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -82,7 +81,8 @@ function getMonthPayment(user_id, str_start, str_end, _clbk)
                 var price = payments[p].price;
                 if(price)
                 {
-                    payments_total += price;
+                    payments_total += parseFloat(price);
+                    payments_total = Math.round(payments_total*100) / 100;
                 }
             }
         }
