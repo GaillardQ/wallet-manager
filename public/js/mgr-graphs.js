@@ -157,6 +157,11 @@ function createMonthPaymentAmountGraph(res)
             avg_total = Math.round(sum_total/nb_total*100)/100;
         }
         
+        for(var i in data)
+        {
+            data[i].avg_total = avg_total;
+        }
+        
         Morris.Line({
             // ID of the element in which to draw the chart.
             element: 'graph-payments-amount',
@@ -166,10 +171,10 @@ function createMonthPaymentAmountGraph(res)
             // The name of the data record attribute that contains x-visitss.
             xkey: 'date',
             // A list of names of data record attributes that contain y-visitss.
-            ykeys: ['sum', 'avg'],
+            ykeys: ['sum', 'avg', 'avg_total'],
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
-            labels: ['Somme (€)', 'Moyenne (€)'],
+            labels: ['Somme (€)', 'Moyenne (€)', 'Moyenne tot (€)'],
             xLabelAngle: 35,
             // Disables line smoothing
             smooth: false,
