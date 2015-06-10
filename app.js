@@ -1,4 +1,4 @@
-ENV = 'DEV'; //PROD
+ENV = 'PROD'; //PROD
 
 var express = require('express');
 var session = require('express-session');
